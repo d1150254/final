@@ -8,19 +8,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <form method="get">
-      <div>
-          <label for="username">使用者名稱:</label>
-          <input type="text" id="username" name="username" required>
-      </div>
-      <div>
-          <label for="password">密碼:</label>
-          <input type="password" id="password" name="password" required>
-      </div>
-      <div>
-          <input type="submit" id="loginbutton" value="登入">
-      </div>
-  </form>
+<div>
+  <a href="http://localhost:3000/login">PChome 24h購物</a>
+  <p> </p>
+</div>
 <input type="number" id="data1" placeholder="stock1" min="0000" max="9999">
 <input type="number" id="data2" placeholder="stock2" min="0000" max="9999">
 <button id="filterButton">Filter Data</button>
@@ -128,12 +119,25 @@
     }
   });
 
+  
   document.getElementById('loginbutton').addEventListener('click', () => {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    if(username === '' || password === ''){
+      alert('請輸入帳號密碼');
+      return;
+    }
     console.log(username, password);
-    fetch("http://localhost:3000/api/logindata?username=" + username + "&password=" + password);
-  });
+    fetch("http://localhost:3000/api/logindata?username=" + username + "&password=" + password)
+    .then(response => {
+        if(response.ok) {
+            window.location.href='https://24h.pchome.com.tw/';
+        } else {
+            throw new Error('Login failed');
+        }
+    })
+    .catch(error => console.log('Error:', error));
+});
 </script>
 
 </body>

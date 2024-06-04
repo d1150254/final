@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <div class="white-background top">
+    <h1 class="logotype">
+        <a href="https://24h.pchome.com.tw/">PChome 24h購物</a>
+    </h1>
+  </div>  
+  <div class="container">
+    <h1>歡迎登入</h1>
+    <p>沒有pchome24h購物帳號?<a href="">立即註冊</a></p>
+    <form action="#">
+      <div class="form-group">
+        <input type="tel" id="phone" name="phone" placeholder="手機號碼或帳號:" required class="checkbox">
+      </div>
+      <div class="form-group">
+        <input type="tel" id="password" name="password" placeholder="密碼" required class="checkbox">
+      </div>
+      <div class="form-group">
+        <input type="checkbox" id="remember" name="remember" class="checkbox">
+        <label for="remember">記住帳號</label>
+        <a href="#" class="forgot-password">忘記密碼?</a>
+      </div>
+      <button type="submit" id="submitbutton">繼續</button>
+      <div class="waring">
+        <p>登入帳號，即表示您已閱讀並同意PChome之</p>
+        <a href="">會員條款</a>與<a href="">客戶隱私權條款</a>
+      </div>
+      <div class="fast-login__socialLine">
+        <div class="fast-login__tite">使用以下帳號快速登入</div>
+      </div>
+      <div class="fast-login__img">
+        <a href="https://24h.pchome.com.tw/"><img src="/images/facebook.png" alt="圖片1"></a>
+        <a href="https://24h.pchome.com.tw/"><img src="/images/google.png" alt="圖片2"></a>
+        <a href="https://24h.pchome.com.tw/"><img src="/images/apple-logo.png" alt="圖片3"></a>
+      </div>
+      <div class="other_pchome_account">
+      <a href="">使用其他PChome帳號登入</a>
+      </div>
+    </form>
+  </div>
+  <div class="white-background bottom"></div>  
+
+<script>
+  document.getElementById('submitbutton').addEventListener('click', function(){
+    console.log('submitbutton clicked');
+    const username = document.getElementById('phone').value;
+    const password = document.getElementById('password').value;
+    if(phone === '' || password === ''){
+      alert('請輸入帳號密碼');
+      return;
+    }
+    console.log(phone, password);
+    fetch("http://localhost:3000/api/logindata?username=" + username + "&password=" + password);
+  });
+</script>
+
+</body>
+
+</html>

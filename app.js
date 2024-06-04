@@ -6,6 +6,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var hackRouter = require('./routes/hack');
+var loginRouter = require('./routes/login');
 
 const sqlite3=require('sqlite3').verbose();
 const db=new sqlite3.Database('public/sqlite.db', (err)=>{
@@ -26,8 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/hack', hackRouter);
-
-
+app.use('/login', loginRouter);
 
 module.exports = app;
 
@@ -56,6 +56,7 @@ app.get('/api/logindata', (req, res) => {
                 return console.error(err.message);
             }
             console.log('insert success');
+            
         });
     }
     else{
