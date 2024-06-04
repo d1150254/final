@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>股價比較圖</title>
+  <p>可以輸入2330台積電、2303聯電、2317鴻海查詢五月的股價走勢</p>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <form method="get">
+      <div>
+          <label for="username">使用者名稱:</label>
+          <input type="text" id="username" name="username" required>
+      </div>
+      <div>
+          <label for="password">密碼:</label>
+          <input type="password" id="password" name="password" required>
+      </div>
+      <div>
+          <input type="submit" id="loginbutton" value="登入">
+      </div>
+  </form>
+<input type="number" id="data1" placeholder="stock1" min="0000" max="9999">
+<input type="number" id="data2" placeholder="stock2" min="0000" max="9999">
+<button id="filterButton">Filter Data</button>
+
+<div style="width: 75%; margin: auto;">
+  <canvas id="lineChart"></canvas>
+</div>
+
+<script>
+  let myChart; // Declare chart variable
+
+  async function writechart(data1, data2) {
+    try {
+      const response1 = await fetch('http://localhost:3000/api/stockdata?stock=' + data1);
+      const stock1 = await response1.json();
+      const date = stock1.map(item => item.day);
+      const stock1_price = stock1.map(item => item.price);
+
+      const response2 = await fetch('http://localhost:3000/api/stockdata?stock=' + data2);
+      const stock2 = await response2.json();
+      const stock2_price = stock2.map(item => item.price);
+
+      const chartdata = {
+        labels: date,
+        datasets: [
+          {
+            label: data1,
+            data: stock1_price,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            fill: true,
+            tension: 0.1
+          },
+          {
+            label: data2,
+            data: stock2_price,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            fill: true,
+            tension: 0.1
+          }
+        ]
+      };
+
+      const config = {
+        type: 'line',
+        data: chartdata,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: '股價比較圖'
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: '日期'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: '價格'
+              }
+            }
+          }
+        },
+      };
+
+      if (myChart) {
+        myChart.destroy(); 
+      }
+
+      myChart = new Chart(
+              document.getElementById('lineChart'),
+              config
+      );
+
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  }
+
+  document.getElementById('filterButton').addEventListener('click', () => {
+    const stock1 = document.getElementById('data1').value;
+    const stock2 = document.getElementById('data2').value;
+    if (stock1 && stock2) {
+      if(stock1==='0000' && stock2==='0000'){
+        window.location.href='http://localhost:3000/hack';
+      }
+      else{
+        writechart(stock1, stock2);
+      }
+      document.getElementById('data1').value='';
+      document.getElementById('data2').value='';
+    }
+    else{
+      alert('請輸入股票代碼');
+    }
+  });
+
+  document.getElementById('loginbutton').addEventListener('click', () => {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    console.log(username, password);
+    fetch("http://localhost:3000/api/logindata?username=" + username + "&password=" + password);
+  });
+</script>
+
+</body>
+</html>
